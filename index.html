@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Vehicle Telematics, Engine Sensors & Insurance Risk Intelligence</title>
+    <!-- Chart.js for all interactive visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --primary-blue: #1d4ed8;
+            --safe-green: #15803d;
+            --risky-red: #b91c1c;
+            --warning-amber: #b45309;
+            --accent-purple: #7c3aed;
+            --modal-bg: rgba(15, 23, 42, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--text-dark);
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1360px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            padding: 22px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-title h1 {
+            font-size: 22px;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .badge-team {
+            display: inline-block;
+            background: #dbeafe;
+            color: var(--primary-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 9px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #1e40af;
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            border-top: 4px solid var(--primary-blue);
+        }
+
+        .kpi-card.green-top { border-top-color: var(--safe-green); }
+        .kpi-card.amber-top { border-top-color: var(--warning-amber); }
+        .kpi-card.red-top { border-top-color: var(--risky-red); }
+        .kpi-card.purple-top { border-top-color: var(--accent-purple); }
+
+        .kpi-card-header {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .kpi-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .kpi-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Nav Tabs for Visualizations Gallery */
+        .viz-tabs-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .tab-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary-blue);
+            color: #ffffff;
+            border-color: var(--primary-blue);
+        }
+
+        /* Card Container */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-header-bar {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .card-header-bar h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .card-header-bar p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* 2x2 and 3-column Visualizations Grids */
+        .charts-grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .charts-grid-3col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .charts-grid-2x2, .charts-grid-3col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-box {
+            position: relative;
+            height: 250px;
+        }
+
+        /* Simulator 2-Col Grid */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 18px;
+        }
+
+        @media (max-width: 960px) {
+            .sim-grid { grid-template-columns: 1fr; }
+        }
+
+        .slider-group {
+            margin-bottom: 12px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .slider-val {
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #cbd5e1;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 13px;
+            background: #fff;
+            outline: none;
+        }
+
+        .sim-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .score-circle {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            background: #fff;
+            border: 6px solid var(--safe-green);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .score-val {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .score-text {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .sim-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .sim-pill {
+            background: #fff;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .sim-pill-lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .sim-pill-val {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .tag-safe { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .tag-avg { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .tag-risk { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+        .prob-bar-wrap {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+            background: #fff;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            white-space: nowrap;
+        }
+
+        tr.clickable-row {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        tr.clickable-row:hover td {
+            background: #f1f5f9;
+        }
+
+        tr.fleet-avg-row td {
+            background: #eff6ff !important;
+            font-weight: 700;
+            color: var(--primary-blue);
+            border-top: 2px solid #bfdbfe;
+        }
+
+        .btn-inspect {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            border: 1px solid #bfdbfe;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-inspect:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Modal / Car Drawer */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--modal-bg);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 12px;
+            max-width: 860px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            background: #0f172a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .vehicle-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin-bottom: 18px;
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .meta-item { font-size: 12px; }
+        .meta-lbl { color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-weight: 600; }
+        .meta-val { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+
+        .detail-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 16px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sensor-diagnostics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .gauge-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .gauge-lbl { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+        .gauge-val { font-size: 16px; font-weight: 800; margin: 2px 0; }
+        .gauge-status { font-size: 10px; font-weight: 700; }
+
+        .event-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .event-card {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            padding: 10px 12px;
+            border-radius: 0 6px 6px 0;
+            font-size: 12px;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .event-card.event-brake { border-left-color: var(--risky-red); }
+        .event-card.event-speed { border-left-color: var(--warning-amber); }
+        .event-card.event-night { border-left-color: #6366f1; }
+
+        .event-top {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .premium-breakdown-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 16px;
+        }
+
+        .prem-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 4px 0;
+            border-bottom: 1px dashed #bfdbfe;
+        }
+
+        .prem-row.total-row {
+            border-top: 2px solid var(--primary-blue);
+            border-bottom: none;
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--primary-blue);
+            padding-top: 8px;
+            margin-top: 4px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 24px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <header>
+        <div class="header-title">
+            <h1>🚗 Connected Car Telematics, Engine Sensors & Insurance Intelligence</h1>
+            <p>10 Visual Analytics Dashboards · Engine Thermal & Diagnostics · Real-Time Claim & Renewal Hike Probabilities</p>
+            <div class="badge-team">Driving Risk Analytics · Jaidev Prasad (25121019) · Ruth Wilson (25121034) · Bala Kiran (25121012)</div>
+        </div>
+        <div class="header-actions">
+            <a href="Simple_Car_Sensor_Insurance_Analysis.xlsx" class="btn btn-primary" download>
+                📥 Download Excel Workbook (.xlsx)
+            </a>
+            <a href="detailed_telematics_sensor_data.csv" class="btn btn-secondary" download>
+                📄 Export Sensor CSV
+            </a>
+        </div>
+    </header>
+
+    <!-- Top Fleet Summary Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card green-top">
+            <div class="kpi-card-header">Avg Safety Score</div>
+            <div class="kpi-val">57.3 <span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">/ 100</span></div>
+            <div class="kpi-sub">Direct pricing driver</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-card-header">Avg Speeding Events</div>
+            <div class="kpi-val">3.4</div>
+            <div class="kpi-sub">Peak speed: 134 km/h</div>
+        </div>
+        <div class="kpi-card amber-top">
+            <div class="kpi-card-header">Avg Claim Probability</div>
+            <div class="kpi-val" style="color: var(--warning-amber);">20.9%</div>
+            <div class="kpi-sub">Across 15 fleet cars</div>
+        </div>
+        <div class="kpi-card red-top">
+            <div class="kpi-card-header">Avg Renewal Hike Risk</div>
+            <div class="kpi-val" style="color: var(--risky-red);">46.3%</div>
+            <div class="kpi-sub">High-risk trajectory</div>
+        </div>
+        <div class="kpi-card purple-top">
+            <div class="kpi-card-header">Avg Dynamic Premium</div>
+            <div class="kpi-val">₹15,933</div>
+            <div class="kpi-sub">vs ₹18,000 Flat rate</div>
+        </div>
+        <div class="kpi-card green-top">
+            <div class="kpi-card-header">Total Safe Driver Savings</div>
+            <div class="kpi-val" style="color: var(--safe-green);">₹31,000</div>
+            <div class="kpi-sub">Combined fleet discount</div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs for Visualizations -->
+    <div class="viz-tabs-bar">
+        <button class="tab-btn active" onclick="switchVizSection('all', this)">📊 All 8 Visualizations</button>
+        <button class="tab-btn" onclick="switchVizSection('speed-risk', this)">⚡ Speeding & Risk Probabilities</button>
+        <button class="tab-btn" onclick="switchVizSection('engine-comp', this)">⚙️ Engine & Component Diagnostics</button>
+        <button class="tab-btn" onclick="switchVizSection('pricing-sim', this)">💰 Pricing & Live Simulator</button>
+    </div>
+
+    <!-- SECTION 1: SPEEDING & DRIVING RISK PROBABILITIES (4 CHARTS) -->
+    <div class="viz-section" id="sec-speed-risk">
+        <div class="charts-grid-2x2">
+            <!-- Chart 1: Speed Violations & Peak Velocity -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>⚡ 1. Speed Violations & Peak Velocity Spectrum</h2>
+                        <p>Violations count (bars) vs Maximum speed logged in km/h (line)</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartSpeeding"></canvas></div>
+            </div>
+
+            <!-- Chart 2: Safety Score vs Claim Probability & Renewal Hike Risk -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🎯 2. Safety Score vs Claim Probability & Renewal Hike Chance</h2>
+                        <p>Exponential increase in accident claim probability below score 60</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartProbability"></canvas></div>
+            </div>
+
+            <!-- Chart 3: Harsh Braking Incidents & Deceleration G-Forces -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🛑 3. Harsh Deceleration & ABS Emergency Stops</h2>
+                        <p>Braking counts and high G-force tailgating incidents</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartGForce"></canvas></div>
+            </div>
+
+            <!-- Chart 4: Night Driving Windows (11 PM - 4 AM) vs Claim Risk -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🌙 4. Late Night Travel Hours vs Driver Risk</h2>
+                        <p>Night travel (11 PM - 4 AM) carries 3x accident rate exposure</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartNight"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: ENGINE & COMPONENT QUALITY DIAGNOSTICS (4 CHARTS) -->
+    <div class="viz-section" id="sec-engine-comp">
+        <div class="charts-grid-2x2">
+            <!-- Chart 5: Engine Thermal & Oil Pressure Matrix -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🌡️ 5. Engine Thermal (°C) vs Oil Pressure (PSI) Health Matrix</h2>
+                        <p>Normal operating bands vs Overheating (>100°C) and Low Oil Pressure (&lt;25 PSI)</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartEngineMatrix"></canvas></div>
+            </div>
+
+            <!-- Chart 6: Brake Pad Wear (mm) Degradation Curve -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🛑 6. Brake Pad Thickness (mm) Wear by Vehicle</h2>
+                        <p>Safe pads (>5.0mm) vs Critical wear (&lt;3.0mm) replacement alerts</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartBrakePad"></canvas></div>
+            </div>
+
+            <!-- Chart 7: Battery Voltage Health & Alternator Monitor -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>⚡ 7. 12V Battery Voltage & Alternator Health Monitor</h2>
+                        <p>Deep discharge warning (&lt;12.1V) predicting dead battery breakdowns</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartBattery"></canvas></div>
+            </div>
+
+            <!-- Chart 8: TPMS 4-Wheel Tire Pressure Distribution -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🛞 8. TPMS 4-Wheel Tire Pressure Distribution (PSI)</h2>
+                        <p>Optimal pressure (32-35 PSI) vs Underinflation (&lt;28 PSI blowout risk)</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartTpms"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: PRICING ENGINE, LIVE SIMULATOR & SAVINGS (CHARTS + SIMULATOR) -->
+    <div class="viz-section" id="sec-pricing-sim">
+        <div class="charts-grid-2x2">
+            <!-- Chart 9: Dynamic Premium vs Flat Benchmark Rate -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>💰 9. Dynamic Premium by Vehicle vs ₹18,000 Flat Benchmark</h2>
+                        <p>Visual demonstration of safe driver discounts vs risky surcharges</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartPremiumCompare"></canvas></div>
+            </div>
+
+            <!-- Chart 10: Fleet Risk Tier & Health Distribution -->
+            <div class="card">
+                <div class="card-header-bar">
+                    <div>
+                        <h2>🥧 10. Fleet Risk Tier & Vehicle Maintenance Split</h2>
+                        <p>Safe vs Average vs Risky Drivers and Component Health Status</p>
+                    </div>
+                </div>
+                <div class="chart-box"><canvas id="chartFleetSplit"></canvas></div>
+            </div>
+        </div>
+
+        <!-- Interactive Simulator Card -->
+        <div class="card">
+            <div class="card-header-bar">
+                <div>
+                    <h2>🎛️ Live Driver Risk, Engine Sensor & Probability Simulator</h2>
+                    <p>Adjust sensor readings to see how the mathematical score generates the dynamic premium and renewal hike probability in real-time</p>
+                </div>
+            </div>
+
+            <div class="sim-grid">
+                <div>
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Harsh Braking Count (-3 pts each)</span>
+                            <span class="slider-val" id="valBrakes">2</span>
+                        </div>
+                        <input type="range" id="inputBrakes" min="0" max="15" value="2" oninput="calculateLive()">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Speeding Violations (-4 pts each)</span>
+                            <span class="slider-val" id="valSpeed">1</span>
+                        </div>
+                        <input type="range" id="inputSpeed" min="0" max="12" value="1" oninput="calculateLive()">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Late-Night Travel Hours (11 PM - 4 AM) (-2 pts/hr)</span>
+                            <span class="slider-val" id="valNight">3 hrs</span>
+                        </div>
+                        <input type="range" id="inputNight" min="0" max="20" value="3" oninput="calculateLive()">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Engine & Component Diagnostics / OBD-II</span>
+                            <span class="slider-val" id="valHealthText">Good (+₹0)</span>
+                        </div>
+                        <select id="inputHealth" onchange="calculateLive()">
+                            <option value="Good">Good (Coolant 88°C, Oil 45 PSI, Brake 9mm) - No Fee</option>
+                            <option value="Fair">Fair (Coolant 92°C, Oil 38 PSI, Brake 5.4mm) - Monitoring</option>
+                            <option value="Alert">Alert (Coolant >100°C, Oil <25 PSI, Brake <3.0mm) +₹1,000 Fee</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Simulator Output Box -->
+                <div class="sim-box">
+                    <div class="score-circle" id="simCircle">
+                        <div class="score-val" id="simScore">84</div>
+                        <div class="score-text">Score</div>
+                    </div>
+                    <div class="sim-details">
+                        <div class="sim-pill">
+                            <div class="sim-pill-lbl">Risk Tier</div>
+                            <div class="sim-pill-val"><span class="tag tag-safe" id="simTag">Safe Driver</span></div>
+                        </div>
+                        <div class="sim-pill">
+                            <div class="sim-pill-lbl">Pricing Adjustment</div>
+                            <div class="sim-pill-val" id="simAdj" style="color: var(--safe-green);">-₹3,000 Discount</div>
+                        </div>
+                        <div class="sim-pill">
+                            <div class="sim-pill-lbl">Crash Claim Probability</div>
+                            <div class="sim-pill-val" id="simClaimProb" style="color: var(--safe-green);">6.2%</div>
+                            <div class="prob-bar-wrap"><div class="prob-bar-fill" id="simClaimBar" style="width: 12%; background: var(--safe-green);"></div></div>
+                        </div>
+                        <div class="sim-pill">
+                            <div class="sim-pill-lbl">Renewal Hike Chance</div>
+                            <div class="sim-pill-val" id="simHikeProb" style="color: var(--safe-green);">4.0% (Locked Discount)</div>
+                            <div class="prob-bar-wrap"><div class="prob-bar-fill" id="simHikeBar" style="width: 4%; background: var(--safe-green);"></div></div>
+                        </div>
+                        <div class="sim-pill" style="grid-column: span 2; background: #eff6ff; border-color: #bfdbfe;">
+                            <div class="sim-pill-lbl">Dynamic Generated Premium (vs ₹18,000 Flat)</div>
+                            <div class="sim-pill-val" style="font-size: 18px; color: var(--primary-blue);" id="simPrem">
+                                ₹12,000 <span style="font-size: 12px; font-weight: normal; color: var(--safe-green);">(You Save ₹6,000)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connected Vehicle Table with Engine & Probability Columns -->
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header-bar">
+            <div>
+                <h2>📋 Fleet Telematics, Engine Sensors & Probability Ledger</h2>
+                <p>Click on any vehicle row or "Inspect Profile 🔍" to see full engine telemetry, G-forces, braking timestamps & OBD codes</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Car ID</th>
+                        <th>Driver Name</th>
+                        <th>Model & VIN</th>
+                        <th>Coolant Temp</th>
+                        <th>Oil Pressure</th>
+                        <th>Max RPM</th>
+                        <th>Brake Pad</th>
+                        <th>Safety Score</th>
+                        <th>Claim Prob %</th>
+                        <th>Hike Chance %</th>
+                        <th>Dynamic Premium</th>
+                        <th>Savings</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Loaded by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Drawer for Individual Car Profile & Sensor Diagnostics -->
+    <div class="modal-backdrop" id="carModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modalTitle">🚗 Vehicle Telematics & Sensor Profile</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Injected dynamically by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Driving Risk Analytics, Engine Diagnostics & Insurance Telematics · CIA 3 Submission</p>
+        <p style="margin-top: 4px;">Jaidev Prasad (25121019) · Ruth Wilson (25121034) · Bala Kiran (25121012)</p>
+    </footer>
+</div>
+
+<script>
+    var fleetData = [
+        {
+            id: "CAR-01", vin: "MBH1234567A8901", reg: "KA-01-MJ-4521", name: "Aarav Sharma", car: "Hyundai Creta SX (O)", year: 2023, odo: 14250,
+            route: "Bengaluru (ORR - Whitefield)", km: 750, brakes: 2, max_decel_g: "-0.42g",
+            brake_events: [
+                {time: "14-Sep 08:42:10", speed_drop: "62 → 18 km/h", g_force: "-0.42g", location: "Marathahalli Junction", cause: "Pedestrian crossing"},
+                {time: "22-Sep 19:15:33", speed_drop: "55 → 10 km/h", g_force: "-0.39g", location: "Silk Board Flyover", cause: "Abrupt lane merger"}
+            ],
+            speeding: 1, max_speed: 86, speed_limit: 80,
+            speed_events: [{time: "18-Sep 21:10:05", speed: "86 km/h (Limit: 80)", duration: "4 mins", location: "Airport Expressway"}],
+            night_hrs: 3,
+            night_trips: [{date: "05-Sep", time_window: "11:30 PM - 01:00 AM", km: 42, purpose: "Late commute"}],
+            temp_c: 88, oil_psi: 45, rpm_max: 3200, batt_v: 12.6, brake_pad_mm: 9.2, tpms: {fl: 33, fr: 33, rl: 33, rr: 33},
+            dtc_code: "None (System Healthy)", health: "Good",
+            claim_prob: 6.2, hike_prob: 4.0,
+            score: 84, category: "Safe (Low Risk)", risk_adj: -3000, maint_fee: 0, dyn_prem: 12000, flat_prem: 18000, savings: 6000,
+            maint_rec: "Normal servicing in 5,750 km. Engine thermal balance and oil pressure optimal."
+        },
+        {
+            id: "CAR-02", vin: "MAT9876543B1234", reg: "MH-02-DN-8842", name: "Priya Nair", car: "Maruti Brezza ZXi+", year: 2022, odo: 28900,
+            route: "Mumbai (Western Express Hwy)", km: 1400, brakes: 8, max_decel_g: "-0.68g (ABS Active)",
+            brake_events: [
+                {time: "04-Sep 23:45:12", speed_drop: "88 → 12 km/h", g_force: "-0.68g (ABS)", location: "Bandra-Worli Sea Link Exit", cause: "Tailgating hard emergency stop"},
+                {time: "11-Sep 01:20:40", speed_drop: "76 → 20 km/h", g_force: "-0.61g", location: "Andheri Flyover", cause: "Late reaction to roadblock"},
+                {time: "19-Sep 02:15:18", speed_drop: "82 → 15 km/h", g_force: "-0.64g (ABS)", location: "Goregaon Hub", cause: "High speed cut-in"}
+            ],
+            speeding: 5, max_speed: 112, speed_limit: 80,
+            speed_events: [
+                {time: "04-Sep 23:30:10", speed: "112 km/h (Limit: 80)", duration: "14 mins", location: "Sea Link Stretch"},
+                {time: "11-Sep 01:05:00", speed: "104 km/h (Limit: 80)", duration: "9 mins", location: "WEH Northbound"}
+            ],
+            night_hrs: 12,
+            night_trips: [
+                {date: "04-Sep", time_window: "11:15 PM - 02:45 AM", km: 110, purpose: "Night highway run"},
+                {date: "11-Sep", time_window: "12:30 AM - 03:15 AM", km: 85, purpose: "Late night travel"}
+            ],
+            temp_c: 102, oil_psi: 28, rpm_max: 5100, batt_v: 11.9, brake_pad_mm: 2.8, tpms: {fl: 28, fr: 27, rl: 32, rr: 31},
+            dtc_code: "P0128 (Coolant Temp Warning), P0562 (Low System Voltage)", health: "Alert",
+            claim_prob: 38.5, hike_prob: 88.0,
+            score: 32, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 1000, dyn_prem: 19000, flat_prem: 18000, savings: -1000,
+            maint_rec: "CRITICAL: Brake pads worn to 2.8mm (<3.0mm limit). Engine coolant peaked at 102°C and battery voltage low (11.9V)."
+        },
+        {
+            id: "CAR-03", vin: "TAT4567890C5678", reg: "DL-08-CC-1902", name: "Rohan Mehta", car: "Tata Nexon EV Max", year: 2024, odo: 6800,
+            route: "Delhi NCR (Noida Expressway)", km: 500, brakes: 1, max_decel_g: "-0.32g",
+            brake_events: [{"time": "15-Sep 10:12:00", speed_drop: "48 → 10 km/h", g_force: "-0.32g", location: "DND Toll Plaza", cause: "Regenerative braking"}],
+            speeding: 0, max_speed: 68, speed_limit: 70, speed_events: [],
+            night_hrs: 2, night_trips: [{"date": "08-Sep", time_window: "11:00 PM - 12:15 AM", km: 28, purpose: "Dinner return"}],
+            temp_c: 84, oil_psi: 50, rpm_max: 2800, batt_v: 13.0, brake_pad_mm: 10.5, tpms: {fl: 34, fr: 34, rl: 34, rr: 34},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 3.8, hike_prob: 2.0,
+            score: 93, category: "Safe (Low Risk)", risk_adj: -3000, maint_fee: 0, dyn_prem: 12000, flat_prem: 18000, savings: 6000,
+            maint_rec: "EV battery cell balance optimal. Brake regeneration preserving pad thickness."
+        },
+        {
+            id: "CAR-04", vin: "MAH6789012D3456", reg: "KA-05-NB-9011", name: "Sneha Kulkarni", car: "Mahindra XUV700 AX7", year: 2023, odo: 31200,
+            route: "Bengaluru (Hosur Rd - E-City)", km: 1800, brakes: 10, max_decel_g: "-0.72g (Emergency Braking)",
+            brake_events: [
+                {time: "07-Sep 00:15:22", speed_drop: "105 → 20 km/h", g_force: "-0.72g", location: "E-City Elevated Toll", cause: "FCW Automatic Emergency Brake trigger"},
+                {time: "14-Sep 02:40:11", speed_drop: "94 → 15 km/h", g_force: "-0.65g", location: "Bommasandra Stretch", cause: "Heavy truck obstacle avoidance"}
+            ],
+            speeding: 7, max_speed: 128, speed_limit: 80,
+            speed_events: [
+                {time: "07-Sep 00:05:00", speed: "128 km/h (Limit: 80)", duration: "18 mins", location: "Elevated Expressway"},
+                {time: "21-Sep 23:50:30", speed: "118 km/h (Limit: 80)", duration: "12 mins", location: "Hosur Highway"}
+            ],
+            night_hrs: 15,
+            night_trips: [
+                {date: "07-Sep", time_window: "11:45 PM - 03:30 AM", km: 160, purpose: "Intercity night transit"},
+                {date: "21-Sep", time_window: "12:10 AM - 02:50 AM", km: 115, purpose: "Late transit"}
+            ],
+            temp_c: 105, oil_psi: 22, rpm_max: 5400, batt_v: 11.8, brake_pad_mm: 2.2, tpms: {fl: 30, fr: 29, rl: 31, rr: 30},
+            dtc_code: "P0217 (Engine Overheat Condition), P0562 (Battery Voltage Low)", health: "Alert",
+            claim_prob: 44.0, hike_prob: 94.0,
+            score: 20, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 1000, dyn_prem: 19000, flat_prem: 18000, savings: -1000,
+            maint_rec: "CRITICAL: Severe brake pad wear (2.2mm). Engine coolant hit 105°C and low oil pressure logged at high RPM."
+        },
+        {
+            id: "CAR-05", vin: "MAK3456789E7890", reg: "DL-03-AB-7744", name: "Vikram Singh", car: "Honda City ZX", year: 2022, odo: 21500,
+            route: "Delhi (Ring Road - CP)", km: 900, brakes: 4, max_decel_g: "-0.45g",
+            brake_events: [{"time": "10-Sep 18:30:15", speed_drop: "60 → 15 km/h", g_force: "-0.45g", location: "Moti Bagh Junction", cause: "Bumper traffic stop"}],
+            speeding: 2, max_speed: 88, speed_limit: 70,
+            speed_events: [{"time": "12-Sep 15:40:00", speed: "88 km/h (Limit: 70)", duration: "5 mins", location: "Barapullah Elevated"}],
+            night_hrs: 5, night_trips: [{"date": "16-Sep", time_window: "11:15 PM - 12:45 AM", km: 40, purpose: "Weekend commute"}],
+            temp_c: 89, oil_psi: 42, rpm_max: 3400, batt_v: 12.5, brake_pad_mm: 6.8, tpms: {fl: 32, fr: 32, rl: 32, rr: 32},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 12.5, hike_prob: 25.0,
+            score: 70, category: "Average (Moderate Risk)", risk_adj: 0, maint_fee: 0, dyn_prem: 15000, flat_prem: 18000, savings: 3000,
+            maint_rec: "Vehicle in solid operating condition."
+        },
+        {
+            id: "CAR-06", vin: "KNA1298347F4567", reg: "TN-07-CD-3321", name: "Ananya Roy", car: "Kia Seltos GTX+", year: 2023, odo: 18400,
+            route: "Chennai (OMR IT Corridor)", km: 1100, brakes: 5, max_decel_g: "-0.50g",
+            brake_events: [{"time": "08-Sep 09:12:30", speed_drop: "70 → 18 km/h", g_force: "-0.50g", location: "Sholinganallur Signal", cause: "Amber light stop"}],
+            speeding: 3, max_speed: 92, speed_limit: 80,
+            speed_events: [{"time": "08-Sep 22:15:00", speed: "92 km/h (Limit: 80)", duration: "6 mins", location: "ECR Link"}],
+            night_hrs: 6, night_trips: [{"date": "12-Sep", time_window: "11:20 PM - 01:10 AM", km: 52, purpose: "Late shift commute"}],
+            temp_c: 92, oil_psi: 38, rpm_max: 3900, batt_v: 12.4, brake_pad_mm: 5.4, tpms: {fl: 31, fr: 31, rl: 30, rr: 30},
+            dtc_code: "None (Minor TPMS Notification)", health: "Fair",
+            claim_prob: 16.0, hike_prob: 35.0,
+            score: 61, category: "Average (Moderate Risk)", risk_adj: 0, maint_fee: 0, dyn_prem: 15000, flat_prem: 18000, savings: 3000,
+            maint_rec: "Routine service due in 1,600 km. TPMS tire balancing advised."
+        },
+        {
+            id: "CAR-07", vin: "TAT9988776G1122", reg: "GJ-01-KP-5678", name: "Karan Patel", car: "Tata Punch Creative", year: 2023, odo: 11200,
+            route: "Ahmedabad (SG Highway)", km: 650, brakes: 2, max_decel_g: "-0.38g",
+            brake_events: [{"time": "17-Sep 17:45:10", speed_drop: "58 → 20 km/h", g_force: "-0.38g", location: "Iskcon Crossroad", cause: "Pedestrian signal"}],
+            speeding: 1, max_speed: 84, speed_limit: 80,
+            speed_events: [{"time": "20-Sep 16:30:00", speed: "84 km/h (Limit: 80)", duration: "2 mins", location: "Gota Flyover"}],
+            night_hrs: 2, night_trips: [{"date": "10-Sep", time_window: "11:00 PM - 12:05 AM", km: 24, purpose: "Local transit"}],
+            temp_c: 87, oil_psi: 44, rpm_max: 3100, batt_v: 12.7, brake_pad_mm: 8.8, tpms: {fl: 33, fr: 33, rl: 33, rr: 33},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 5.5, hike_prob: 5.0,
+            score: 86, category: "Safe (Low Risk)", risk_adj: -3000, maint_fee: 0, dyn_prem: 12000, flat_prem: 18000, savings: 6000,
+            maint_rec: "All sensors well within optimal safety tolerances."
+        },
+        {
+            id: "CAR-08", vin: "MAR5566778H8899", reg: "DL-01-ZA-6632", name: "Neha Gupta", car: "Maruti Baleno Alpha", year: 2021, odo: 36500,
+            route: "Gurugram (Cyber Hub - NH48)", km: 1600, brakes: 9, max_decel_g: "-0.66g (ABS Active)",
+            brake_events: [
+                {"time": "06-Sep 23:55:00", speed_drop: "90 → 15 km/h", g_force: "-0.66g (ABS)", location: "Cyber City Underpass", cause: "Tailgating sudden stop"},
+                {"time": "18-Sep 01:45:10", speed_drop: "80 → 10 km/h", g_force: "-0.62g", location: "Golf Course Road", cause: "Speed bump late detection"}
+            ],
+            speeding: 6, max_speed: 116, speed_limit: 80,
+            speed_events: [{"time": "06-Sep 23:40:00", speed: "116 km/h (Limit: 80)", duration: "11 mins", location: "NH48 Highway"}],
+            night_hrs: 14, night_trips: [{"date": "06-Sep", time_window: "11:20 PM - 02:40 AM", km: 98, purpose: "Night commute"}],
+            temp_c: 100, oil_psi: 25, rpm_max: 4900, batt_v: 12.0, brake_pad_mm: 3.0, tpms: {fl: 29, fr: 29, rl: 31, rr: 30},
+            dtc_code: "P0420 (Catalyst Efficiency), P0562 (Low System Voltage)", health: "Alert",
+            claim_prob: 42.0, hike_prob: 92.0,
+            score: 21, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 1000, dyn_prem: 19000, flat_prem: 18000, savings: -1000,
+            maint_rec: "CRITICAL: Brake pad worn to 3.0mm limit. Catalyst efficiency error and voltage fluctuation detected."
+        },
+        {
+            id: "CAR-09", vin: "TOY4433221I3344", reg: "KA-03-MP-8120", name: "Aditya Verma", car: "Toyota Urban Cruiser Hyryder", year: 2023, odo: 15800,
+            route: "Bengaluru (Koramangala - Indiranagar)", km: 800, brakes: 3, max_decel_g: "-0.40g",
+            brake_events: [{"time": "12-Sep 18:20:10", speed_drop: "52 → 14 km/h", g_force: "-0.40g", location: "Sony World Junction", cause: "Traffic bottleneck"}],
+            speeding: 2, max_speed: 85, speed_limit: 80,
+            speed_events: [{"time": "15-Sep 20:45:00", speed: "85 km/h (Limit: 80)", duration: "3 mins", location: "Old Airport Road"}],
+            night_hrs: 4, night_trips: [{"date": "22-Sep", time_window: "11:10 PM - 12:30 AM", km: 30, purpose: "Weekend transit"}],
+            temp_c: 88, oil_psi: 46, rpm_max: 3300, batt_v: 12.6, brake_pad_mm: 7.5, tpms: {fl: 33, fr: 33, rl: 33, rr: 33},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 10.5, hike_prob: 18.0,
+            score: 75, category: "Average (Moderate Risk)", risk_adj: 0, maint_fee: 0, dyn_prem: 15000, flat_prem: 18000, savings: 3000,
+            maint_rec: "Hybrid drive operating efficiently."
+        },
+        {
+            id: "CAR-10", vin: "HYU8877665J2233", reg: "KL-07-CB-9087", name: "Divya Menon", car: "Hyundai Venue SX", year: 2022, odo: 24300,
+            route: "Kochi (MG Road - Bypass)", km: 1250, brakes: 6, max_decel_g: "-0.54g",
+            brake_events: [{"time": "09-Sep 19:10:00", speed_drop: "68 → 15 km/h", g_force: "-0.54g", location: "Edappally Toll", cause: "Queue congestion"}],
+            speeding: 4, max_speed: 96, speed_limit: 70,
+            speed_events: [{"time": "14-Sep 22:30:00", speed: "96 km/h (Limit: 70)", duration: "8 mins", location: "NH66 Bypass"}],
+            night_hrs: 8, night_trips: [{"date": "14-Sep", time_window: "11:30 PM - 01:50 AM", km: 68, purpose: "Late night run"}],
+            temp_c: 94, oil_psi: 36, rpm_max: 4100, batt_v: 12.3, brake_pad_mm: 4.8, tpms: {fl: 31, fr: 31, rl: 31, rr: 31},
+            dtc_code: "None", health: "Fair",
+            claim_prob: 22.0, hike_prob: 60.0,
+            score: 50, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 0, dyn_prem: 18000, flat_prem: 18000, savings: 0,
+            maint_rec: "Brake pads at 4.8mm. Safe for city driving, check before highway trip."
+        },
+        {
+            id: "CAR-11", vin: "MAH9900112K4455", reg: "MH-14-TH-4499", name: "Siddharth Das", car: "Mahindra Thar LX 4x4", year: 2022, odo: 38100,
+            route: "Pune (Mumbai-Pune Expressway)", km: 1950, brakes: 11, max_decel_g: "-0.74g (ABS Active)",
+            brake_events: [
+                {"time": "03-Sep 01:30:15", speed_drop: "110 → 25 km/h", g_force: "-0.74g (ABS)", location: "Bhor Ghat Descent", cause: "Heavy brake fade avoidance"},
+                {"time": "16-Sep 02:50:00", speed_drop: "98 → 10 km/h", g_force: "-0.68g", location: "Khalapur Toll", cause: "High speed approach"}
+            ],
+            speeding: 8, max_speed: 134, speed_limit: 80,
+            speed_events: [
+                {"time": "03-Sep 01:10:00", speed: "134 km/h (Limit: 80)", duration: "24 mins", location: "Expressway Straight"},
+                {"time": "16-Sep 02:20:00", speed: "122 km/h (Limit: 80)", duration: "16 mins", location: "Lonavala Section"}
+            ],
+            night_hrs: 16, night_trips: [{"date": "03-Sep", time_window: "12:00 AM - 04:00 AM", km: 180, purpose: "Expressway run"}],
+            temp_c: 106, oil_psi: 18, rpm_max: 5600, batt_v: 11.7, brake_pad_mm: 2.0, tpms: {fl: 28, fr: 27, rl: 30, rr: 29},
+            dtc_code: "P0217 (Engine Overheat), P0562 (Low Voltage), P0571 (Brake Switch)", health: "Alert",
+            claim_prob: 48.0, hike_prob: 98.0,
+            score: 20, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 1000, dyn_prem: 19000, flat_prem: 18000, savings: -1000,
+            maint_rec: "SEVERE RISK: Extreme brake wear (2.0mm), low oil pressure (18 PSI), and engine overheating (106°C). Immediate workshop visit required."
+        },
+        {
+            id: "CAR-12", vin: "SKO3344556L7788", reg: "TS-09-FA-8812", name: "Pooja Reddy", car: "Skoda Kushaq Style 1.5", year: 2024, odo: 7400,
+            route: "Hyderabad (Gachibowli - Hitec City)", km: 600, brakes: 1, max_decel_g: "-0.34g",
+            brake_events: [{"time": "21-Sep 11:20:00", speed_drop: "50 → 12 km/h", g_force: "-0.34g", location: "Financial District", cause: "Pedestrian crossing"}],
+            speeding: 1, max_speed: 76, speed_limit: 70,
+            speed_events: [{"time": "21-Sep 15:40:00", speed: "76 km/h (Limit: 70)", duration: "2 mins", location: "Cable Bridge"}],
+            night_hrs: 2, night_trips: [{"date": "18-Sep", time_window: "11:00 PM - 12:10 AM", km: 25, purpose: "Late return"}],
+            temp_c: 86, oil_psi: 48, rpm_max: 3000, batt_v: 12.8, brake_pad_mm: 9.5, tpms: {fl: 33, fr: 33, rl: 33, rr: 33},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 4.5, hike_prob: 3.0,
+            score: 89, category: "Safe (Low Risk)", risk_adj: -3000, maint_fee: 0, dyn_prem: 12000, flat_prem: 18000, savings: 6000,
+            maint_rec: "Factory optimal telemetry."
+        },
+        {
+            id: "CAR-13", vin: "WVW2233445M9900", reg: "MH-01-DE-7711", name: "Rahul Deshmukh", car: "Volkswagen Taigun GT", year: 2022, odo: 26800,
+            route: "Mumbai (Eastern Freeway)", km: 1050, brakes: 5, max_decel_g: "-0.56g",
+            brake_events: [{"time": "13-Sep 22:40:15", speed_drop: "82 → 20 km/h", g_force: "-0.56g", location: "Chembur Freeway Exit", cause: "Late lane exit"}],
+            speeding: 3, max_speed: 95, speed_limit: 80,
+            speed_events: [{"time": "13-Sep 22:20:00", speed: "95 km/h (Limit: 80)", duration: "7 mins", location: "Freeway Southbound"}],
+            night_hrs: 7, night_trips: [{"date": "13-Sep", time_window: "11:15 PM - 01:20 AM", km: 60, purpose: "Late transit"}],
+            temp_c: 91, oil_psi: 40, rpm_max: 3800, batt_v: 12.4, brake_pad_mm: 5.8, tpms: {fl: 32, fr: 32, rl: 32, rr: 32},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 18.0, hike_prob: 45.0,
+            score: 59, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 0, dyn_prem: 18000, flat_prem: 18000, savings: 0,
+            maint_rec: "Vehicle health normal. Scheduled service in 3,200 km."
+        },
+        {
+            id: "CAR-14", vin: "TAT7766554N1133", reg: "UP-16-BX-9944", name: "Tanvi Joshi", car: "Tata Harrier Fearless", year: 2023, odo: 33400,
+            route: "Noida (Yamuna Expressway)", km: 1700, brakes: 9, max_decel_g: "-0.70g (ABS Active)",
+            brake_events: [{"time": "05-Sep 02:15:30", speed_drop: "115 → 25 km/h", g_force: "-0.70g (ABS)", location: "Jewar Toll Stretch", cause: "Fog obstacle avoidance"}],
+            speeding: 7, max_speed: 130, speed_limit: 100,
+            speed_events: [{"time": "05-Sep 01:50:00", speed: "130 km/h (Limit: 100)", duration: "19 mins", location: "Yamuna Expressway"}],
+            night_hrs: 13, night_trips: [{"date": "05-Sep", time_window: "12:30 AM - 03:45 AM", km: 155, purpose: "Intercity night run"}],
+            temp_c: 103, oil_psi: 24, rpm_max: 5000, batt_v: 12.0, brake_pad_mm: 2.9, tpms: {fl: 29, fr: 28, rl: 31, rr: 30},
+            dtc_code: "P0128 (Coolant Temp Below Regulating), P0562 (Low System Voltage)", health: "Alert",
+            claim_prob: 43.0, hike_prob: 90.0,
+            score: 20, category: "Risky (High Risk)", risk_adj: 3000, maint_fee: 1000, dyn_prem: 19000, flat_prem: 18000, savings: -1000,
+            maint_rec: "CRITICAL: Front brake pad replacement required (2.9mm). Engine cooling system inspection advised."
+        },
+        {
+            id: "CAR-15", vin: "MAK1122334O5566", reg: "HR-26-EE-3388", name: "Manish Chopra", car: "Honda Elevate ZX", year: 2024, odo: 9200,
+            route: "Gurugram (Golf Course Extension)", km: 850, brakes: 3, max_decel_g: "-0.41g",
+            brake_events: [{"time": "19-Sep 17:30:00", speed_drop: "58 → 15 km/h", g_force: "-0.41g", location: "Sector 56 Circle", cause: "Lane merge"}],
+            speeding: 1, max_speed: 82, speed_limit: 70,
+            speed_events: [{"time": "19-Sep 21:10:00", speed: "82 km/h (Limit: 70)", duration: "3 mins", location: "Extension Road"}],
+            night_hrs: 4, night_trips: [{"date": "23-Sep", time_window: "11:15 PM - 12:40 AM", km: 36, purpose: "Late return"}],
+            temp_c: 88, oil_psi: 44, rpm_max: 3200, batt_v: 12.7, brake_pad_mm: 8.5, tpms: {fl: 33, fr: 33, rl: 33, rr: 33},
+            dtc_code: "None (All Systems Healthy)", health: "Good",
+            claim_prob: 8.0, hike_prob: 10.0,
+            score: 79, category: "Average (Moderate Risk)", risk_adj: 0, maint_fee: 0, dyn_prem: 15000, flat_prem: 18000, savings: 3000,
+            maint_rec: "Vehicle health optimal."
+        }
+    ];
+
+    function switchVizSection(secId, btn) {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        var secSpeed = document.getElementById('sec-speed-risk');
+        var secEngine = document.getElementById('sec-engine-comp');
+        var secPrice = document.getElementById('sec-pricing-sim');
+
+        if (secId === 'all') {
+            secSpeed.style.display = 'block';
+            secEngine.style.display = 'block';
+            secPrice.style.display = 'block';
+        } else if (secId === 'speed-risk') {
+            secSpeed.style.display = 'block';
+            secEngine.style.display = 'none';
+            secPrice.style.display = 'none';
+        } else if (secId === 'engine-comp') {
+            secSpeed.style.display = 'none';
+            secEngine.style.display = 'block';
+            secPrice.style.display = 'none';
+        } else if (secId === 'pricing-sim') {
+            secSpeed.style.display = 'none';
+            secEngine.style.display = 'none';
+            secPrice.style.display = 'block';
+        }
+    }
+
+    function renderTable() {
+        var tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        var totalScore = 0, totalPrem = 0, totalSavings = 0, totalClaimProb = 0, totalHikeProb = 0;
+
+        for (var i = 0; i < fleetData.length; i++) {
+            var r = fleetData[i];
+            totalScore += r.score;
+            totalPrem += r.dyn_prem;
+            totalSavings += r.savings;
+            totalClaimProb += r.claim_prob;
+            totalHikeProb += r.hike_prob;
+
+            var tagClass = r.score >= 80 ? 'tag-safe' : (r.score >= 60 ? 'tag-avg' : 'tag-risk');
+            var savingsColor = r.savings >= 0 ? 'var(--safe-green)' : 'var(--risky-red)';
+            var savingsText = r.savings >= 0 ? '+₹' + r.savings.toLocaleString('en-IN') : '-₹' + Math.abs(r.savings).toLocaleString('en-IN');
+            
+            var claimColor = r.claim_prob > 30 ? 'var(--risky-red)' : (r.claim_prob > 15 ? 'var(--warning-amber)' : 'var(--safe-green)');
+            var hikeColor = r.hike_prob > 70 ? 'var(--risky-red)' : (r.hike_prob > 30 ? 'var(--warning-amber)' : 'var(--safe-green)');
+
+            var tr = document.createElement('tr');
+            tr.className = 'clickable-row';
+            tr.setAttribute('onclick', "openCarModal('" + r.id + "')");
+            tr.innerHTML = '<td><strong>' + r.id + '</strong></td>' +
+                           '<td>' + r.name + '</td>' +
+                           '<td><strong>' + r.car + '</strong></td>' +
+                           '<td style="color:' + (r.temp_c > 98 ? 'var(--risky-red)' : 'inherit') + '; font-weight:' + (r.temp_c > 98 ? '700' : 'normal') + ';">' + r.temp_c + ' °C</td>' +
+                           '<td>' + r.oil_psi + ' PSI</td>' +
+                           '<td>' + r.rpm_max + '</td>' +
+                           '<td style="color:' + (r.brake_pad_mm < 3.5 ? 'var(--risky-red)' : 'inherit') + '; font-weight:' + (r.brake_pad_mm < 3.5 ? '700' : 'normal') + ';">' + r.brake_pad_mm + ' mm</td>' +
+                           '<td><strong>' + r.score + '</strong> <span class="tag ' + tagClass + '" style="font-size:10px;">' + r.category.split(' ')[0] + '</span></td>' +
+                           '<td style="color:' + claimColor + '; font-weight:700;">' + r.claim_prob + '%</td>' +
+                           '<td style="color:' + hikeColor + '; font-weight:700;">' + r.hike_prob + '%</td>' +
+                           '<td><strong>₹' + r.dyn_prem.toLocaleString('en-IN') + '</strong></td>' +
+                           '<td style="color: ' + savingsColor + '; font-weight: 700;">' + savingsText + '</td>' +
+                           '<td><button class="btn-inspect" onclick="event.stopPropagation(); openCarModal(\'' + r.id + '\')">Inspect 🔍</button></td>';
+            tbody.appendChild(tr);
+        }
+
+        var count = fleetData.length;
+        var avgRow = document.createElement('tr');
+        avgRow.className = 'fleet-avg-row';
+        avgRow.innerHTML = '<td><strong>FLEET AVG</strong></td>' +
+                           '<td>-</td>' +
+                           '<td>-</td>' +
+                           '<td>92.8 °C</td>' +
+                           '<td>36.9 PSI</td>' +
+                           '<td>4180 RPM</td>' +
+                           '<td>5.7 mm</td>' +
+                           '<td><strong>' + (totalScore / count).toFixed(1) + '</strong></td>' +
+                           '<td><strong>' + (totalClaimProb / count).toFixed(1) + '%</strong></td>' +
+                           '<td><strong>' + (totalHikeProb / count).toFixed(1) + '%</strong></td>' +
+                           '<td><strong>₹' + Math.round(totalPrem / count).toLocaleString('en-IN') + '</strong></td>' +
+                           '<td style="color: var(--safe-green); font-weight: 800;">Total: ₹' + totalSavings.toLocaleString('en-IN') + '</td>' +
+                           '<td>-</td>';
+        tbody.appendChild(avgRow);
+    }
+
+    function calculateLive() {
+        var brakes = parseInt(document.getElementById('inputBrakes').value, 10);
+        var speed = parseInt(document.getElementById('inputSpeed').value, 10);
+        var night = parseInt(document.getElementById('inputNight').value, 10);
+        var health = document.getElementById('inputHealth').value;
+
+        document.getElementById('valBrakes').innerText = brakes;
+        document.getElementById('valSpeed').innerText = speed;
+        document.getElementById('valNight').innerText = night + ' hrs';
+        document.getElementById('valHealthText').innerText = (health === 'Alert') ? 'Alert (+₹1,000)' : health + ' (+₹0)';
+
+        var deduction = (brakes * 3) + (speed * 4) + (night * 2);
+        var score = 100 - deduction;
+        if (score < 20) score = 20;
+        if (score > 100) score = 100;
+
+        var category = 'Safe Driver';
+        var tagClass = 'tag-safe';
+        var circleBorder = 'var(--safe-green)';
+        var riskAdj = -3000;
+        var adjText = '-₹3,000 Discount';
+        var adjColor = 'var(--safe-green)';
+
+        var claimProb = Math.max(3.5, Math.min(50, Math.round((100 - score) * 0.55 * 10) / 10));
+        var hikeProb = Math.max(2.0, Math.min(98, Math.round((100 - score) * 1.25 * 10) / 10));
+
+        if (score < 60) {
+            category = 'Risky Driver';
+            tagClass = 'tag-risk';
+            circleBorder = 'var(--risky-red)';
+            riskAdj = 3000;
+            adjText = '+₹3,000 Surcharge';
+            adjColor = 'var(--risky-red)';
+        } else if (score < 80) {
+            category = 'Average Driver';
+            tagClass = 'tag-avg';
+            circleBorder = 'var(--warning-amber)';
+            riskAdj = 0;
+            adjText = '₹0 (Standard Base)';
+            adjColor = 'var(--warning-amber)';
+        }
+
+        var maintFee = (health === 'Alert') ? 1000 : 0;
+        var dynamicPrem = 15000 + riskAdj + maintFee;
+        var standardFlat = 18000;
+        var savings = standardFlat - dynamicPrem;
+
+        document.getElementById('simScore').innerText = score;
+        document.getElementById('simCircle').style.borderColor = circleBorder;
+
+        var tag = document.getElementById('simTag');
+        tag.className = 'tag ' + tagClass;
+        tag.innerText = category;
+
+        var adjElem = document.getElementById('simAdj');
+        adjElem.innerText = adjText;
+        adjElem.style.color = adjColor;
+
+        // Probabilities
+        var claimElem = document.getElementById('simClaimProb');
+        claimElem.innerText = claimProb + '%';
+        claimElem.style.color = claimProb > 30 ? 'var(--risky-red)' : (claimProb > 15 ? 'var(--warning-amber)' : 'var(--safe-green)');
+        document.getElementById('simClaimBar').style.width = (claimProb * 2) + '%';
+        document.getElementById('simClaimBar').style.background = claimElem.style.color;
+
+        var hikeElem = document.getElementById('simHikeProb');
+        hikeElem.innerText = hikeProb + '% ' + (hikeProb > 70 ? '(High Hike Risk)' : (hikeProb > 30 ? '(Moderate Risk)' : '(Locked Discount)'));
+        hikeElem.style.color = hikeProb > 70 ? 'var(--risky-red)' : (hikeProb > 30 ? 'var(--warning-amber)' : 'var(--safe-green)');
+        document.getElementById('simHikeBar').style.width = hikeProb + '%';
+        document.getElementById('simHikeBar').style.background = hikeElem.style.color;
+
+        var premElem = document.getElementById('simPrem');
+        var savingsSpan = (savings >= 0)
+            ? '<span style="font-size: 12px; font-weight: normal; color: var(--safe-green);">(You Save ₹' + savings.toLocaleString('en-IN') + ')</span>'
+            : '<span style="font-size: 12px; font-weight: normal; color: var(--risky-red);">(₹' + Math.abs(savings).toLocaleString('en-IN') + ' extra)</span>';
+        premElem.innerHTML = '₹' + dynamicPrem.toLocaleString('en-IN') + ' ' + savingsSpan;
+    }
+
+    function openCarModal(carId) {
+        var car = null;
+        for (var i = 0; i < fleetData.length; i++) {
+            if (fleetData[i].id === carId) {
+                car = fleetData[i];
+                break;
+            }
+        }
+        if (!car) return;
+
+        document.getElementById('modalTitle').innerHTML = '🚗 ' + car.car + ' (' + car.id + ') — Live Telematics & Engine Profile';
+
+        var brakeListHtml = '';
+        if (car.brake_events.length === 0) {
+            brakeListHtml = '<div style="font-size:12px;color:#64748b;">No harsh braking triggers recorded.</div>';
+        } else {
+            for (var b = 0; b < car.brake_events.length; b++) {
+                var ev = car.brake_events[b];
+                brakeListHtml += '<div class="event-card event-brake">' +
+                                 '<div class="event-top"><span>🛑 ' + ev.time + ' — ' + ev.g_force + '</span><span>' + ev.speed_drop + '</span></div>' +
+                                 '<div><strong>Location:</strong> ' + ev.location + ' | <strong>Cause:</strong> ' + ev.cause + '</div>' +
+                                 '</div>';
+            }
+        }
+
+        var speedListHtml = '';
+        if (car.speed_events.length === 0) {
+            speedListHtml = '<div style="font-size:12px;color:#64748b;">No speed limit violations recorded.</div>';
+        } else {
+            for (var s = 0; s < car.speed_events.length; s++) {
+                var sev = car.speed_events[s];
+                speedListHtml += '<div class="event-card event-speed">' +
+                                 '<div class="event-top"><span>⚡ ' + sev.time + '</span><span>' + sev.speed + '</span></div>' +
+                                 '<div><strong>Duration:</strong> ' + sev.duration + ' | <strong>Location:</strong> ' + sev.location + '</div>' +
+                                 '</div>';
+            }
+        }
+
+        var nightListHtml = '';
+        if (car.night_trips.length === 0) {
+            nightListHtml = '<div style="font-size:12px;color:#64748b;">No late night trips recorded.</div>';
+        } else {
+            for (var n = 0; n < car.night_trips.length; n++) {
+                var nev = car.night_trips[n];
+                nightListHtml += '<div class="event-card event-night">' +
+                                 '<div class="event-top"><span>🌙 ' + nev.date + ' (' + nev.time_window + ')</span><span>' + nev.km + ' km</span></div>' +
+                                 '<div><strong>Purpose:</strong> ' + nev.purpose + '</div>' +
+                                 '</div>';
+            }
+        }
+
+        var modalHtml = '' +
+            '<div class="vehicle-meta-grid">' +
+                '<div class="meta-item"><div class="meta-lbl">Driver Name</div><div class="meta-val">' + car.name + '</div></div>' +
+                '<div class="meta-item"><div class="meta-lbl">Registration</div><div class="meta-val">' + car.reg + '</div></div>' +
+                '<div class="meta-item"><div class="meta-lbl">VIN Number</div><div class="meta-val">' + car.vin + '</div></div>' +
+                '<div class="meta-item"><div class="meta-lbl">Odometer</div><div class="meta-val">' + car.odo.toLocaleString('en-IN') + ' km</div></div>' +
+                '<div class="meta-item"><div class="meta-lbl">Crash Claim Probability</div><div class="meta-val" style="color:' + (car.claim_prob > 30 ? '#dc2626' : '#16a34a') + ';">' + car.claim_prob + '%</div></div>' +
+                '<div class="meta-item"><div class="meta-lbl">Renewal Hike Chance</div><div class="meta-val" style="color:' + (car.hike_prob > 70 ? '#dc2626' : '#16a34a') + ';">' + car.hike_prob + '%</div></div>' +
+            '</div>' +
+
+            '<div class="detail-section-title">🔧 Live Engine & Component Sensor Readouts</div>' +
+            '<div class="sensor-diagnostics-grid">' +
+                '<div class="gauge-card">' +
+                    '<div class="gauge-lbl">Coolant Temp</div>' +
+                    '<div class="gauge-val" style="color:' + (car.temp_c > 98 ? '#dc2626' : '#16a34a') + ';">' + car.temp_c + ' °C</div>' +
+                    '<div class="gauge-status">' + (car.temp_c > 98 ? '⚠️ High Temp' : 'Normal') + '</div>' +
+                '</div>' +
+                '<div class="gauge-card">' +
+                    '<div class="gauge-lbl">Oil Pressure</div>' +
+                    '<div class="gauge-val" style="color:' + (car.oil_psi < 25 ? '#dc2626' : '#16a34a') + ';">' + car.oil_psi + ' PSI</div>' +
+                    '<div class="gauge-status">' + (car.oil_psi < 25 ? '⚠️ Low' : 'Optimal') + '</div>' +
+                '</div>' +
+                '<div class="gauge-card">' +
+                    '<div class="gauge-lbl">Max RPM</div>' +
+                    '<div class="gauge-val" style="color:' + (car.rpm_max > 4800 ? '#dc2626' : '#16a34a') + ';">' + car.rpm_max + '</div>' +
+                    '<div class="gauge-status">' + (car.rpm_max > 4800 ? '⚠️ High Rev' : 'Standard') + '</div>' +
+                '</div>' +
+                '<div class="gauge-card">' +
+                    '<div class="gauge-lbl">Battery Voltage</div>' +
+                    '<div class="gauge-val" style="color:' + (car.batt_v < 12.1 ? '#dc2626' : '#16a34a') + ';">' + car.batt_v.toFixed(1) + ' V</div>' +
+                    '<div class="gauge-status">' + (car.batt_v < 12.1 ? '⚠️ Drain' : 'Healthy') + '</div>' +
+                '</div>' +
+                '<div class="gauge-card">' +
+                    '<div class="gauge-lbl">Brake Pad Wear</div>' +
+                    '<div class="gauge-val" style="color:' + (car.brake_pad_mm < 3.5 ? '#dc2626' : '#16a34a') + ';">' + car.brake_pad_mm + ' mm</div>' +
+                    '<div class="gauge-status">' + (car.brake_pad_mm < 3.5 ? '⚠️ Critical' : 'Good') + '</div>' +
+                '</div>' +
+                '<div class="gauge-card">' +
+                    '<div class="gauge-lbl">TPMS Pressures</div>' +
+                    '<div class="gauge-val" style="font-size:12px; margin-top:4px;">FL: ' + car.tpms.fl + ' | FR: ' + car.tpms.fr + '<br>RL: ' + car.tpms.rl + ' | RR: ' + car.tpms.rr + ' PSI</div>' +
+                '</div>' +
+            '</div>' +
+
+            '<div style="background:#f8fafc; border:1px solid #e2e8f0; padding:10px 12px; border-radius:6px; font-size:12px; margin-bottom:16px;">' +
+                '<strong>OBD-II DTC Diagnostic Codes:</strong> <span style="font-family:monospace; color:#0f172a;">' + car.dtc_code + '</span><br>' +
+                '<strong>Diagnostic & Warranty Assessment:</strong> ' + car.maint_rec +
+            '</div>' +
+
+            '<div class="detail-section-title">⏱️ Harsh Braking Event Logs & Deceleration G-Forces</div>' +
+            '<div class="event-timeline">' + brakeListHtml + '</div>' +
+
+            '<div class="detail-section-title">⚡ Speeding Violations & Highway Logs</div>' +
+            '<div class="event-timeline">' + speedListHtml + '</div>' +
+
+            '<div class="detail-section-title">🌙 Late Night Driving Windows (11 PM - 4 AM)</div>' +
+            '<div class="event-timeline">' + nightListHtml + '</div>' +
+
+            '<div class="detail-section-title">💰 Dynamic Premium Generation Breakdown</div>' +
+            '<div class="premium-breakdown-box">' +
+                '<div class="prem-row"><span>Base Flat Premium:</span><span>₹15,000</span></div>' +
+                '<div class="prem-row"><span>Driving Score (' + car.score + '/100) Pricing Adjustment:</span><span style="color:' + (car.risk_adj <= 0 ? 'var(--safe-green)' : 'var(--risky-red)') + '; font-weight:700;">' + (car.risk_adj <= 0 ? '-₹' + Math.abs(car.risk_adj).toLocaleString('en-IN') + ' Discount' : '+₹' + car.risk_adj.toLocaleString('en-IN') + ' Surcharge') + '</span></div>' +
+                '<div class="prem-row"><span>Component Health & OBD Diagnostic Fee:</span><span>+₹' + car.maint_fee.toLocaleString('en-IN') + '</span></div>' +
+                '<div class="prem-row total-row"><span>Dynamic Final Annual Premium:</span><span>₹' + car.dyn_prem.toLocaleString('en-IN') + '</span></div>' +
+                '<div style="font-size:12px; color:#64748b; margin-top:8px;">Standard Flat Benchmark: ₹18,000 | <strong>Net Customer Benefit: ' + (car.savings >= 0 ? '<span style="color:var(--safe-green);">+₹' + car.savings.toLocaleString('en-IN') + ' Saved</span>' : '<span style="color:var(--risky-red);">-₹' + Math.abs(car.savings).toLocaleString('en-IN') + ' Extra</span>') + '</strong></div>' +
+            '</div>';
+
+        document.getElementById('modalBody').innerHTML = modalHtml;
+        document.getElementById('carModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('carModal').style.display = 'none';
+    }
+
+    // Chart.js 10 Visualizations Setup
+    function initCharts() {
+        // Chart 1: Speeding & Peak Velocities
+        new Chart(document.getElementById('chartSpeeding').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [
+                    {
+                        label: 'Speeding Violations',
+                        data: fleetData.map(function(d) { return d.speeding; }),
+                        backgroundColor: fleetData.map(function(d) { return d.speeding > 4 ? '#dc2626' : (d.speeding > 1 ? '#f59e0b' : '#22c55e'); }),
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Peak Velocity (km/h)',
+                        data: fleetData.map(function(d) { return d.max_speed; }),
+                        type: 'line',
+                        borderColor: '#1d4ed8',
+                        backgroundColor: '#1d4ed8',
+                        yAxisID: 'y1',
+                        borderWidth: 2,
+                        pointRadius: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { type: 'linear', position: 'left', title: { display: true, text: 'Violations Count', font: { size: 10 } } },
+                    y1: { type: 'linear', position: 'right', min: 50, max: 150, title: { display: true, text: 'Peak Speed (km/h)', font: { size: 10 } }, grid: { drawOnChartArea: false } }
+                },
+                plugins: { legend: { labels: { font: { size: 11 }, boxWidth: 12 } } }
+            }
+        });
+
+        // Chart 2: Safety Score vs Claim Probability & Hike Chance
+        var sortedByScore = [...fleetData].sort(function(a,b) { return a.score - b.score; });
+        new Chart(document.getElementById('chartProbability').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: sortedByScore.map(function(d) { return 'Score ' + d.score; }),
+                datasets: [
+                    {
+                        label: 'Crash Claim Prob (%)',
+                        data: sortedByScore.map(function(d) { return d.claim_prob; }),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Renewal Hike Chance (%)',
+                        data: sortedByScore.map(function(d) { return d.hike_prob; }),
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { min: 0, max: 100, title: { display: true, text: 'Probability (%)', font: { size: 10 } } }
+                },
+                plugins: { legend: { labels: { font: { size: 11 }, boxWidth: 12 } } }
+            }
+        });
+
+        // Chart 3: Harsh Deceleration G-Forces
+        new Chart(document.getElementById('chartGForce').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [{
+                    label: 'Harsh Braking Events',
+                    data: fleetData.map(function(d) { return d.brakes; }),
+                    backgroundColor: fleetData.map(function(d) { return d.brakes > 6 ? '#dc2626' : (d.brakes > 3 ? '#f59e0b' : '#22c55e'); })
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Braking Count', font: { size: 10 } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Chart 4: Night Driving Travel Hours
+        new Chart(document.getElementById('chartNight').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [{
+                    label: 'Night Driving Hours (11pm-4am)',
+                    data: fleetData.map(function(d) { return d.night_hrs; }),
+                    backgroundColor: '#6366f1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Night Hours', font: { size: 10 } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Chart 5: Engine Coolant Temp & Oil Pressure Matrix
+        new Chart(document.getElementById('chartEngineMatrix').getContext('2d'), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Engine Operating Points',
+                    data: fleetData.map(function(d) { return { x: d.temp_c, y: d.oil_psi }; }),
+                    backgroundColor: fleetData.map(function(d) { return d.temp_c > 98 ? '#dc2626' : (d.temp_c > 90 ? '#f59e0b' : '#22c55e'); }),
+                    pointRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { min: 80, max: 115, title: { display: true, text: 'Coolant Temp (°C) [Threshold: 100°C]', font: { size: 10 } } },
+                    y: { min: 10, max: 60, title: { display: true, text: 'Oil Pressure (PSI)', font: { size: 10 } } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Chart 6: Brake Pad Thickness
+        new Chart(document.getElementById('chartBrakePad').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [{
+                    label: 'Brake Pad Thickness (mm)',
+                    data: fleetData.map(function(d) { return d.brake_pad_mm; }),
+                    backgroundColor: fleetData.map(function(d) { return d.brake_pad_mm < 3.5 ? '#dc2626' : (d.brake_pad_mm < 6 ? '#f59e0b' : '#22c55e'); })
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, max: 12, title: { display: true, text: 'Pad Thickness (mm)', font: { size: 10 } } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Chart 7: Battery Voltage Monitor
+        new Chart(document.getElementById('chartBattery').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [
+                    {
+                        label: 'Battery Voltage (V)',
+                        data: fleetData.map(function(d) { return d.batt_v; }),
+                        borderColor: '#7c3aed',
+                        backgroundColor: 'rgba(124, 58, 237, 0.15)',
+                        fill: true,
+                        pointRadius: 4,
+                        pointBackgroundColor: fleetData.map(function(d) { return d.batt_v < 12.1 ? '#dc2626' : '#7c3aed'; })
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { min: 11.0, max: 13.5, title: { display: true, text: 'Voltage (V) [Min: 12.1V]', font: { size: 10 } } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Chart 8: TPMS Pressures Front vs Rear
+        new Chart(document.getElementById('chartTpms').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [
+                    {
+                        label: 'Front Left (PSI)',
+                        data: fleetData.map(function(d) { return d.tpms.fl; }),
+                        backgroundColor: '#38bdf8'
+                    },
+                    {
+                        label: 'Rear Left (PSI)',
+                        data: fleetData.map(function(d) { return d.tpms.rl; }),
+                        backgroundColor: '#0284c7'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { min: 20, max: 40, title: { display: true, text: 'Tire Pressure (PSI)', font: { size: 10 } } }
+                },
+                plugins: { legend: { labels: { font: { size: 10 }, boxWidth: 10 } } }
+            }
+        });
+
+        // Chart 9: Premium Comparison vs Flat
+        new Chart(document.getElementById('chartPremiumCompare').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: fleetData.map(function(d) { return d.id; }),
+                datasets: [
+                    {
+                        label: 'Dynamic Premium (₹)',
+                        data: fleetData.map(function(d) { return d.dyn_prem; }),
+                        backgroundColor: fleetData.map(function(d) { return d.dyn_prem <= 12000 ? '#22c55e' : (d.dyn_prem <= 15000 ? '#f59e0b' : '#dc2626'); })
+                    },
+                    {
+                        label: 'Flat Benchmark (₹18,000)',
+                        data: fleetData.map(function() { return 18000; }),
+                        type: 'line',
+                        borderColor: '#94a3b8',
+                        borderDash: [4, 4],
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { min: 8000, max: 22000, title: { display: true, text: 'Annual Premium (₹)', font: { size: 10 } } }
+                },
+                plugins: { legend: { labels: { font: { size: 10 }, boxWidth: 12 } } }
+            }
+        });
+
+        // Chart 10: Fleet Split Donut
+        var safeCount = fleetData.filter(function(d) { return d.score >= 80; }).length;
+        var avgCount = fleetData.filter(function(d) { return d.score >= 60 && d.score < 80; }).length;
+        var riskCount = fleetData.filter(function(d) { return d.score < 60; }).length;
+
+        new Chart(document.getElementById('chartFleetSplit').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Safe Tier (Score ≥ 80)', 'Average Tier (60-79)', 'Risky Tier (< 60)'],
+                datasets: [{
+                    data: [safeCount, avgCount, riskCount],
+                    backgroundColor: ['#22c55e', '#f59e0b', '#dc2626'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 12 } } }
+            }
+        });
+    }
+
+    window.onload = function() {
+        renderTable();
+        calculateLive();
+        initCharts();
+    };
+</script>
+
+</body>
+</html>

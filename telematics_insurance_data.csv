@@ -1,0 +1,26 @@
+Vehicle ID,Driver Name,Car Model,Monthly KM,Harsh Braking /100km,Speeding Instances /100km,Late Night Driving %,Rapid Accel Events,Engine Temp (°C),Battery Voltage (V),Brake Wear %,OBD Faults,Driving Safety Score,Risk Category,Vehicle Health Score,Maintenance Status,Base Premium (₹),Distance Fee (₹),Driving Risk Adj (₹),Maint Buffer (₹),Dynamic Premium (₹),Traditional Flat Premium (₹),Driver Savings (₹)
+CAR-101,Aarav Sharma,Hyundai Creta,650,2,1,5%,1,88,12.6,25%,0,88.0,Low Risk,100,Good Condition,15000,1300.0,-3000.0,0,13300.0,22000,8700.0
+CAR-102,Priya Nair,Maruti Brezza,1200,8,6,28%,5,94,12.1,68%,1,40.5,High Risk,45,Critical Maintenance,15000,2400.0,3750.0,1500,22650.0,22000,-650.0
+CAR-103,Rohan Mehta,Tata Nexon,480,1,0,2%,0,86,12.7,18%,0,96.5,Low Risk,100,Good Condition,15000,960.0,-3000.0,0,12960.0,22000,9040.0
+CAR-104,Sneha Kulkarni,Mahindra XUV700,1850,12,9,35%,8,104,11.9,82%,2,13.5,High Risk,15,Critical Maintenance,15000,3700.0,3750.0,1500,23950.0,22000,-1950.0
+CAR-105,Vikram Singh,Honda City,820,4,2,12%,2,89,12.5,40%,0,75.0,Moderate Risk,100,Good Condition,15000,1640.0,0.0,0,16640.0,22000,5360.0
+CAR-106,Ananya Roy,Kia Seltos,950,3,2,10%,2,90,12.6,35%,0,78.5,Moderate Risk,100,Good Condition,15000,1900.0,0.0,0,16900.0,22000,5100.0
+CAR-107,Karan Patel,Tata Punch,1400,9,7,22%,6,96,12.3,60%,0,36.5,High Risk,60,Inspection Due,15000,2800.0,3750.0,500,22050.0,22000,-50.0
+CAR-108,Neha Gupta,Maruti Baleno,520,1,1,4%,1,87,12.8,20%,0,91.0,Low Risk,100,Good Condition,15000,1040.0,-3000.0,0,13040.0,22000,8960.0
+CAR-109,Aditya Verma,Toyota Hyryder,1100,5,4,15%,3,91,12.4,45%,0,63.5,Moderate Risk,100,Good Condition,15000,2200.0,0.0,0,17200.0,22000,4800.0
+CAR-110,Divya Menon,Hyundai Venue,780,3,1,8%,1,88,12.5,30%,0,84.0,Low Risk,100,Good Condition,15000,1560.0,-3000.0,0,13560.0,22000,8440.0
+CAR-111,Siddharth Das,Mahindra Thar,2100,14,11,40%,9,102,12.0,88%,2,10,High Risk,15,Critical Maintenance,15000,4200.0,3750.0,1500,24450.0,22000,-2450.0
+CAR-112,Pooja Reddy,Skoda Kushaq,600,2,0,5%,1,89,12.6,22%,0,91.0,Low Risk,100,Good Condition,15000,1200.0,-3000.0,0,13200.0,22000,8800.0
+CAR-113,Rahul Deshmukh,Volkswagen Taigun,1300,7,5,18%,4,93,12.3,55%,0,52.5,High Risk,75,Inspection Due,15000,2600.0,3750.0,500,21850.0,22000,150.0
+CAR-114,Tanvi Joshi,Tata Harrier,1650,10,8,30%,7,98,12.1,75%,1,25.5,High Risk,15,Critical Maintenance,15000,3300.0,3750.0,1500,23550.0,22000,-1550.0
+CAR-115,Manish Chopra,Honda Elevate,720,2,1,6%,1,88,12.7,28%,0,87.5,Low Risk,100,Good Condition,15000,1440.0,-3000.0,0,13440.0,22000,8560.0
+CAR-116,Ritu Saxena,Maruti Swift,900,4,3,14%,2,90,12.4,38%,0,71.0,Moderate Risk,100,Good Condition,15000,1800.0,0.0,0,16800.0,22000,5200.0
+CAR-117,Varun Iyer,Hyundai Verna,1750,11,10,32%,8,101,11.8,79%,1,14.5,High Risk,15,Critical Maintenance,15000,3500.0,3750.0,1500,23750.0,22000,-1750.0
+CAR-118,Kavita Rao,Kia Sonet,550,1,1,3%,0,87,12.8,15%,0,93.0,Low Risk,100,Good Condition,15000,1100.0,-3000.0,0,13100.0,22000,8900.0
+CAR-119,Gaurav Bhatt,MG Hector,1250,6,4,16%,4,92,12.3,50%,0,59.0,High Risk,75,Inspection Due,15000,2500.0,3750.0,500,21750.0,22000,250.0
+CAR-120,Deepa Nambiar,Toyota Innova,1900,13,8,38%,7,103,12.0,84%,2,14.0,High Risk,15,Critical Maintenance,15000,3800.0,3750.0,1500,24050.0,22000,-2050.0
+CAR-121,Arjun Sen,Tata Altroz,680,2,1,5%,1,88,12.6,26%,0,88.0,Low Risk,100,Good Condition,15000,1360.0,-3000.0,0,13360.0,22000,8640.0
+CAR-122,Meera Kapoor,Maruti Grand Vitara,880,3,2,9%,2,89,12.5,34%,0,79.0,Moderate Risk,100,Good Condition,15000,1760.0,0.0,0,16760.0,22000,5240.0
+CAR-123,Kunal Bansal,Hyundai i20,1450,8,6,24%,5,95,12.2,65%,0,42.5,High Risk,75,Inspection Due,15000,2900.0,3750.0,500,22150.0,22000,-150.0
+CAR-124,Swati Tiwari,Mahindra Scorpio-N,1800,11,9,34%,7,99,12.1,78%,1,18.0,High Risk,15,Critical Maintenance,15000,3600.0,3750.0,1500,23850.0,22000,-1850.0
+CAR-125,Nikhil Agarwal,Skoda Slavia,750,2,1,7%,1,88,12.7,30%,0,87.0,Low Risk,100,Good Condition,15000,1500.0,-3000.0,0,13500.0,22000,8500.0
