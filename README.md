@@ -6,7 +6,8 @@
 ---
 
 ## 🌟 Live Interactive Dashboard
-🌐 **[Click here to view the Live Dashboard](https://<your-username>.github.io/<repo-name>/)** *(once GitHub Pages is enabled)*
+🌐 **[Click here to open the Live Dashboard](https://burujula-jaidev-prasad.github.io/telematics-risk-analytics/)**
+*(Live on GitHub Pages — accessible from anywhere, any device)*
 
 ---
 
