@@ -202,6 +202,67 @@
             margin-bottom: 20px;
         }
 
+        /* Formula Explanatory Cards */
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .formula-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .formula-card.green { border-left-color: var(--safe-green); }
+        .formula-card.amber { border-left-color: var(--warning-amber); }
+        .formula-card.red { border-left-color: var(--risky-red); }
+        .formula-card.purple { border-left-color: var(--accent-purple); }
+
+        .formula-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .formula-code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            line-height: 1.4;
+        }
+
+        .formula-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .formula-desc ul {
+            margin-top: 6px;
+            padding-left: 18px;
+        }
+
+        .formula-desc li {
+            margin-bottom: 4px;
+        }
+
         .card-header-bar {
             border-bottom: 1px solid #e2e8f0;
             padding-bottom: 10px;
@@ -688,10 +749,98 @@
 
     <!-- Navigation Tabs for Visualizations -->
     <div class="viz-tabs-bar">
-        <button class="tab-btn active" onclick="switchVizSection('all', this)">📊 All 8 Visualizations</button>
+        <button class="tab-btn active" onclick="switchVizSection('all', this)">📊 All Visualizations & Intelligence</button>
+        <button class="tab-btn" onclick="switchVizSection('formulas', this)">🧮 Scoring & Actuarial Formulas</button>
         <button class="tab-btn" onclick="switchVizSection('speed-risk', this)">⚡ Speeding & Risk Probabilities</button>
         <button class="tab-btn" onclick="switchVizSection('engine-comp', this)">⚙️ Engine & Component Diagnostics</button>
         <button class="tab-btn" onclick="switchVizSection('pricing-sim', this)">💰 Pricing & Live Simulator</button>
+    </div>
+
+    <!-- SECTION: SCORING, ACTUARIAL PRICING & PROBABILITY ENGINE -->
+    <div class="viz-section" id="sec-formulas">
+        <div class="card">
+            <div class="card-header-bar">
+                <div>
+                    <h2>🧮 Mathematical Scoring, Actuarial Pricing & Risk Probability Engine</h2>
+                    <p>Transparent telematics scoring algorithms, component diagnostic tolerances, and risk probability formulations</p>
+                </div>
+            </div>
+
+            <div class="formula-grid">
+                <!-- Formula 1: Safety Score -->
+                <div class="formula-card green">
+                    <div class="formula-title">
+                        <span>🎯 1. Driving Safety Score (0 - 100 Pts)</span>
+                    </div>
+                    <div class="formula-code">
+Score = 100 - (Brakes × 3) - (Speeding × 4) - (Night_Hrs × 2)
+                    </div>
+                    <div class="formula-desc">
+                        <strong>Mathematical Rationale for Weights:</strong>
+                        <ul>
+                            <li><strong>Harsh Braking (-3 pts/event):</strong> Sudden decelerations &gt; 0.40g reflect tailgating, panic stops, and late obstacle detection.</li>
+                            <li><strong>Speeding (-4 pts/violation):</strong> Highest penalty factor because kinetic collision impact energy scales with the square of velocity (E ∝ v²).</li>
+                            <li><strong>Night Driving (-2 pts/hr):</strong> Driving between 11:00 PM – 05:00 AM carries 3.2× higher mortality due to circadian fatigue and reduced visibility.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Formula 2: Dynamic Premium -->
+                <div class="formula-card purple">
+                    <div class="formula-title">
+                        <span>💰 2. Dynamic PHYD Premium Formula</span>
+                    </div>
+                    <div class="formula-code">
+Dynamic Prem = Base (₹15,000) + Risk_Adjustment + Alert_Fee
+                    </div>
+                    <div class="formula-desc">
+                        <strong>Dynamic Pricing Brackets:</strong>
+                        <ul>
+                            <li><strong>Score ≥ 80 (Safe Tier):</strong> -₹3,000 Discount → <strong>₹12,000 / yr</strong> (You save ₹6,000 vs ₹18k flat).</li>
+                            <li><strong>Score 60–79 (Average Tier):</strong> ₹0 Adjustment → <strong>₹15,000 / yr</strong> (You save ₹3,000 vs ₹18k flat).</li>
+                            <li><strong>Score &lt; 60 (Risky Tier):</strong> +₹3,000 Risk Surcharge → <strong>₹18,000 / yr</strong>.</li>
+                            <li><strong>OBD-II Component Alert:</strong> +₹1,000 Maintenance Surcharge → <strong>₹19,000 / yr</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Formula 3: Crash Claim Probability -->
+                <div class="formula-card amber">
+                    <div class="formula-title">
+                        <span>📉 3. Actuarial Crash Claim Probability (%)</span>
+                    </div>
+                    <div class="formula-code">
+Claim Prob % = 3.5% + (100 - Score) × 0.55% + Decel_Factor
+                    </div>
+                    <div class="formula-desc">
+                        <strong>Probability Escalation Logic:</strong>
+                        <ul>
+                            <li><strong>Safe Drivers (Score 80–100):</strong> Baseline claim risk of <strong>3.8% – 6.2%</strong>.</li>
+                            <li><strong>Moderate Drivers (Score 60–79):</strong> Controlled claim risk of <strong>10.5% – 18.0%</strong>.</li>
+                            <li><strong>High-Risk Drivers (Score &lt; 60):</strong> Exponential escalation to <strong>38.5% – 48.0%</strong> claim likelihood.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Formula 4: Renewal Hike Chance -->
+                <div class="formula-card red">
+                    <div class="formula-title">
+                        <span>📈 4. Annual Renewal Hike Chance (%)</span>
+                    </div>
+                    <div class="formula-code">
+Hike Chance % = 100 / (1 + e^(0.10 × (Score - 55))) + DTC_Weight
+                    </div>
+                    <div class="formula-desc">
+                        <strong>Policy Renewal Trajectory:</strong>
+                        <ul>
+                            <li><strong>Score ≥ 80:</strong> <strong>&lt; 5%</strong> (Locked Safe Driver Discount &amp; guaranteed zero surcharge).</li>
+                            <li><strong>Score 60–79:</strong> <strong>25% – 45%</strong> (Standard inflation-indexed renewal).</li>
+                            <li><strong>Score &lt; 60:</strong> <strong>88% – 98%</strong> (Severe rate hike and mandatory high-risk loading).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- SECTION 1: SPEEDING & DRIVING RISK PROBABILITIES (4 CHARTS) -->
@@ -1194,23 +1343,33 @@
         document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
 
+        var secFormulas = document.getElementById('sec-formulas');
         var secSpeed = document.getElementById('sec-speed-risk');
         var secEngine = document.getElementById('sec-engine-comp');
         var secPrice = document.getElementById('sec-pricing-sim');
 
         if (secId === 'all') {
+            if (secFormulas) secFormulas.style.display = 'block';
             secSpeed.style.display = 'block';
             secEngine.style.display = 'block';
             secPrice.style.display = 'block';
+        } else if (secId === 'formulas') {
+            if (secFormulas) secFormulas.style.display = 'block';
+            secSpeed.style.display = 'none';
+            secEngine.style.display = 'none';
+            secPrice.style.display = 'none';
         } else if (secId === 'speed-risk') {
+            if (secFormulas) secFormulas.style.display = 'none';
             secSpeed.style.display = 'block';
             secEngine.style.display = 'none';
             secPrice.style.display = 'none';
         } else if (secId === 'engine-comp') {
+            if (secFormulas) secFormulas.style.display = 'none';
             secSpeed.style.display = 'none';
             secEngine.style.display = 'block';
             secPrice.style.display = 'none';
         } else if (secId === 'pricing-sim') {
+            if (secFormulas) secFormulas.style.display = 'none';
             secSpeed.style.display = 'none';
             secEngine.style.display = 'none';
             secPrice.style.display = 'block';
